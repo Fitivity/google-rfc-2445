@@ -14,14 +14,15 @@
 
 package com.google.ical.iter;
 
+import com.google.ical.util.DTBuilder;
+import com.google.ical.util.TimeUtils;
 import com.google.ical.values.DateValue;
 import com.google.ical.values.IcalParseUtil;
 import com.google.ical.values.PeriodValue;
 import com.google.ical.values.RRule;
-import com.google.ical.util.DTBuilder;
-import com.google.ical.util.TimeUtils;
-import java.util.TimeZone;
 import junit.framework.TestCase;
+
+import java.util.TimeZone;
 
 /**
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
@@ -1091,6 +1092,18 @@ public class RRuleIteratorImplTest extends TestCase {
 
   // TODO(msamuel): test BYSETPOS with FREQ in (WEEKLY,MONTHLY,YEARLY) x
   // (setPos absolute, setPos relative, setPos mixed)
+  public void testWednesdayAt9AndFridayAt12() throws Exception {
+      // Wednesdays at 9:00 and Fridays at noon, starting 1/1/2014 (a Wednesday) through 1/11/2014
+      // (two Saturdays later).  Should be 4 occurrences:
+      // Wed 1/1 at 9:00,
+      // Fri 1/3 at noon,
+      // Wed 1/8 at 9:00,
+      // Fri 1/10 at noon.
+      runRecurrenceIteratorTest(
+              "RRULE:FREQ=WEEKLY;UNTIL=20140111T000000Z;INTERVAL=1;BYDAY=WE,FR;BYHOUR=9,12;BYSETPOS=1,3",
+              IcalParseUtil.parseDateValue("20140101T000000"), 20,
+              "20140101T090000,20140103T120000,20140108T090000,20140110T120000");
+  }
 
   // TODO(msamuel): test that until date properly compared to UTC dates.
 
