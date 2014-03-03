@@ -14,38 +14,27 @@
 
 package com.google.ical.iter;
 
-import com.google.ical.values.RDateList;
+import com.google.ical.util.TimeUtils;
 import com.google.ical.values.DateTimeValueImpl;
 import com.google.ical.values.DateValue;
 import com.google.ical.values.DateValueImpl;
-import com.google.ical.util.TimeUtils;
+import com.google.ical.values.RDateList;
+import junit.framework.Assert;
+import org.junit.Test;
 
 import java.util.Collections;
 import java.util.TimeZone;
-
-import junit.framework.Assert;
-import junit.framework.TestCase;
 
 /**
  *
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class CompoundIteratorImplTest extends TestCase {
+public class CompoundIteratorImplTest {
   // TODO(msamuel): add these tests to javascript too
 
   static final TimeZone PST = TimeZone.getTimeZone("America/Los_Angeles");
   static final TimeZone EST = TimeZone.getTimeZone("America/New_York");
   static final TimeZone UTC = TimeUtils.utcTimezone();
-
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-  }
-
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-  }
 
   private void runRecurrenceIteratorTest(
       String rdata, DateValue dtStart, TimeZone tz, int limit,
@@ -71,11 +60,13 @@ public class CompoundIteratorImplTest extends TestCase {
     assertEquals(golden, sb.toString());
   }
 
+  @Test
   public void testEmptyCompoundIterators() throws Exception {
     runRecurrenceIteratorTest(
         "", new DateValueImpl(2006, 4, 13), PST, 10, null, "20060413");
   }
 
+  @Test
   public void testMultipleChecksDontChange() throws Exception {
     RecurrenceIterator ri = RecurrenceIteratorFactory.createRecurrenceIterator(
         "RRULE:FREQ=WEEKLY;BYDAY=TH;COUNT=3", new DateValueImpl(2006, 4, 9),
@@ -91,6 +82,7 @@ public class CompoundIteratorImplTest extends TestCase {
     assertEquals("20060409,20060413,20060420,20060427", sb.toString());
   }
 
+  @Test
   public void testInterleavingOfDateIterators() throws Exception {
     runRecurrenceIteratorTest(
         "RDATE:20060418,20070101\n"
@@ -99,6 +91,7 @@ public class CompoundIteratorImplTest extends TestCase {
         "20060412,20060413,20060417,20060418,20060422,20070101");
   }
 
+  @Test
   public void testInterleavingOfDateIterators2() throws Exception {
     runRecurrenceIteratorTest(
         "RDATE:20060418,20070101\n"
@@ -107,6 +100,7 @@ public class CompoundIteratorImplTest extends TestCase {
         "20060412,20060413,20060417,20060418,20060422,20070101");
   }
 
+  @Test
   public void testInterleavingOfDateIterators3() throws Exception {
     runRecurrenceIteratorTest(
         "RDATE:20060418,20070101\n"
@@ -115,6 +109,7 @@ public class CompoundIteratorImplTest extends TestCase {
         /*"20060412,20060413,20060417,20060418,*/"20060422,20070101");
   }
 
+  @Test
   public void testInterleavingOfDateIteratorsWithExclusions() throws Exception {
     runRecurrenceIteratorTest(
         "RDATE:20060417,20060418,20070101,20060417\n"
@@ -124,6 +119,7 @@ public class CompoundIteratorImplTest extends TestCase {
         "20060412,20060413,20060418,20060422,20070101");
   }
 
+  @Test
   public void testInterleavingOfDateIteratorsWithExclusions2()
       throws Exception {
     runRecurrenceIteratorTest(
@@ -134,6 +130,7 @@ public class CompoundIteratorImplTest extends TestCase {
         /*"20060412,20060413,*/"20060418,20060422,20070101");
   }
 
+  @Test
   public void testInfiniteRecurrences() throws Exception {
     runRecurrenceIteratorTest(
         "\r\n\n \r\n"
@@ -153,6 +150,7 @@ public class CompoundIteratorImplTest extends TestCase {
         );
   }
 
+  @Test
   public void testInfiniteRecurrences2() throws Exception {
     runRecurrenceIteratorTest(
         "\r\n\n \r\n"
@@ -174,6 +172,7 @@ public class CompoundIteratorImplTest extends TestCase {
         );
   }
 
+  @Test
   public void testInfiniteExclusionsAndFiniteInclusions() throws Exception {
     runRecurrenceIteratorTest(
         "\r\n\n \r\n"
@@ -191,6 +190,7 @@ public class CompoundIteratorImplTest extends TestCase {
         );
   }
 
+  @Test
   public void testInfiniteExclusionsAndFiniteInclusions2() throws Exception {
     runRecurrenceIteratorTest(
         "\r\n\n \r\n"
@@ -208,6 +208,7 @@ public class CompoundIteratorImplTest extends TestCase {
         );
   }
 
+  @Test
   public void testIdenticalInclusionsAndExclusions() throws Exception {
     // According to rfc2445, EXDATE can be used to exclude the DTSTART time from
     // the instances of a recurring event:
@@ -237,6 +238,7 @@ public class CompoundIteratorImplTest extends TestCase {
         );
   }
 
+  @Test
   public void testIdenticalInclusionsAndExclusionsNoDtstartPrivilege()
       throws Exception {
     RecurrenceIterator it = new CompoundIteratorImpl(
@@ -252,6 +254,7 @@ public class CompoundIteratorImplTest extends TestCase {
   }
 
   // monkey tests
+  @Test
   public void testMonkey1() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MONTHLY;INTERVAL=1;BYMONTH=9,5,3",
@@ -259,6 +262,7 @@ public class CompoundIteratorImplTest extends TestCase {
         "20060503,20060903,20070303,20070503,20070903,20080303,...");
   }
 
+  @Test
   public void testMonkey2() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY;COUNT=19;INTERVAL=1;BYMONTH=1,11,6;BYSETPOS=7,-4,6",
@@ -266,6 +270,7 @@ public class CompoundIteratorImplTest extends TestCase {
         "20060422");
   }
 
+  @Test
   public void testMonkey3() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY;WKST=SU;INTERVAL=1;BYSECOND=14",
@@ -273,6 +278,7 @@ public class CompoundIteratorImplTest extends TestCase {
         "20060509T104540,20070509T104514,20080509T104514,...");
   }
 
+  @Test
   public void testMonkey4() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MONTHLY;WKST=SU;INTERVAL=1;"
@@ -282,6 +288,7 @@ public class CompoundIteratorImplTest extends TestCase {
         + "20060522,20060523,20060528,20060531,20060601,20060606,...");
   }
 
+  @Test
   public void testMonkey5() throws Exception {
     // for some reason, libical goes backwards in time on this one
     runRecurrenceIteratorTest(
@@ -300,6 +307,7 @@ public class CompoundIteratorImplTest extends TestCase {
         + "20061206T064653,20061213T064653");
   }
 
+  @Test
   public void testMonkey6() throws Exception {
     // libical doesn't include dtstart for this one
     runRecurrenceIteratorTest(
@@ -311,6 +319,7 @@ public class CompoundIteratorImplTest extends TestCase {
         + "20060405T114248,20060505T114248");
   }
 
+  @Test
   public void testMonkey7() throws Exception {
     // a bug in the by week generator was causing us to skip Feb 2007
     runRecurrenceIteratorTest(
@@ -331,6 +340,7 @@ public class CompoundIteratorImplTest extends TestCase {
         );
   }
 
+  @Test
   public void testMonkey8() throws Exception {
     // I don't know which side this failing on?
     runRecurrenceIteratorTest(
@@ -345,6 +355,7 @@ public class CompoundIteratorImplTest extends TestCase {
         );
   }
 
+  @Test
   public void testMonkey9() throws Exception {
     // another libical crasher
     runRecurrenceIteratorTest(
@@ -355,6 +366,7 @@ public class CompoundIteratorImplTest extends TestCase {
         );
   }
 
+  @Test
   public void testMonkey10() throws Exception {
     // another libical hanger
     runRecurrenceIteratorTest(
@@ -369,6 +381,7 @@ public class CompoundIteratorImplTest extends TestCase {
         );
   }
 
+  @Test
   public void testMonkey11() throws Exception {
     // Days of the month in December
     // 8, 10, 9, 6, 4, 14, 22, 23, 18, 24, 4, 24, 18
@@ -383,6 +396,7 @@ public class CompoundIteratorImplTest extends TestCase {
         );
   }
 
+  @Test
   public void testMonkey11WithAdvanceTo() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY;INTERVAL=1"
@@ -394,6 +408,7 @@ public class CompoundIteratorImplTest extends TestCase {
         );
   }
 
+  @Test
   public void testMonkey12() throws Exception {
     runRecurrenceIteratorTest( // 4, 5, 13, 29, 31
         "RRULE:FREQ=DAILY;INTERVAL=1;BYMONTHDAY=5,29,31,-19,-28",
@@ -403,6 +418,7 @@ public class CompoundIteratorImplTest extends TestCase {
         );
   }
 
+  @Test
   public void testMonkey13() throws Exception {
     runRecurrenceIteratorTest( // 4, 5, 13, 29, 31
         "RRULE:FREQ=DAILY;WKST=SU;COUNT=4;INTERVAL=1;BYMONTHDAY=20,-20",
@@ -411,6 +427,7 @@ public class CompoundIteratorImplTest extends TestCase {
         );
   }
 
+  @Test
   public void testMonkey14() throws Exception {
     runRecurrenceIteratorTest( // 4, 5, 13, 29, 31
         "RRULE:FREQ=YEARLY;BYDAY=TH",
@@ -419,6 +436,7 @@ public class CompoundIteratorImplTest extends TestCase {
         );
   }
 
+  @Test
   public void testExcludedStart() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY;UNTIL=20070414;INTERVAL=1;BYDAY=3SU;BYMONTH=4\n"
@@ -431,6 +449,7 @@ public class CompoundIteratorImplTest extends TestCase {
         );
   }
 
+  @Test
   public void testMonkeySeptember1() throws Exception {
     // From the Monkey Tester
     // RANDOM SEED 1156837020593

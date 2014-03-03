@@ -14,27 +14,19 @@
 
 package com.google.ical.iter;
 
-import com.google.ical.values.Weekday;
+import com.google.ical.util.Predicate;
 import com.google.ical.values.DateValue;
 import com.google.ical.values.IcalParseUtil;
-import com.google.ical.util.Predicate;
-import junit.framework.TestCase;
+import com.google.ical.values.Weekday;
+import org.junit.Test;
 
+import static org.junit.Assert.assertTrue;
 /**
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class FiltersTest extends TestCase {
+public class FiltersTest {
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-  }
-
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-  }
-
+  @Test
   public void testWeekIntervalFilter() throws Exception {
     // *s match those that are in the weeks that should pass the filter
 

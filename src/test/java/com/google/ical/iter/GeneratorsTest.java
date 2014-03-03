@@ -21,23 +21,18 @@ import com.google.ical.values.DateValueImpl;
 import com.google.ical.values.IcalParseUtil;
 import com.google.ical.values.Weekday;
 import com.google.ical.values.WeekdayNum;
-import java.lang.reflect.Field;
-import junit.framework.TestCase;
+import org.junit.Test;
 
+import java.lang.reflect.Field;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 /**
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class GeneratorsTest extends TestCase {
+public class GeneratorsTest {
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-  }
-
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-  }
 
   private void runGeneratorTests(
       Generator generator, DTBuilder builder, String fieldName, String golden)
@@ -59,6 +54,7 @@ public class GeneratorsTest extends TestCase {
     assertEquals(golden, output.toString());
   }
 
+  @Test
   public void testByYearDayGenerator() throws Exception {
     runGeneratorTests(
         Generators.byYearDayGenerator(new int[] { 1, 5, -1, 100 },
@@ -90,6 +86,7 @@ public class GeneratorsTest extends TestCase {
         new DTBuilder(2006, 4, 1), "day", "10");
   }
 
+  @Test
   public void testByWeekNoGenerator() throws Exception {
     Generator g = Generators.byWeekNoGenerator(
         new int[] { 22 }, Weekday.SU, IcalParseUtil.parseDateValue("20060101"));
@@ -123,6 +120,7 @@ public class GeneratorsTest extends TestCase {
     runGeneratorTests(g3, new DTBuilder(2004, 5, 1), "day", "");
   }
 
+  @Test
   public void testByDayGenerator() throws Exception {
     WeekdayNum[] days = new WeekdayNum[] {
       new WeekdayNum(0, Weekday.SU), // every sunday
@@ -138,6 +136,7 @@ public class GeneratorsTest extends TestCase {
         g, new DTBuilder(2006, 2, 1), "day", "5, 6, 12, 19, 21, 26");
   }
 
+  @Test
   public void testByMonthDayGenerator() throws Exception {
     int[] monthDays = new int[] { 1, 15, 29 };
     runGeneratorTests(Generators.byMonthDayGenerator(
@@ -166,6 +165,7 @@ public class GeneratorsTest extends TestCase {
                       new DTBuilder(2006, 4, 1), "day", "1, 30");
   }
 
+  @Test
   public void testByMonthGenerator() throws Exception {
     runGeneratorTests(Generators.byMonthGenerator(
                           new int[] { 2, 8, 6, 10 },
@@ -177,6 +177,7 @@ public class GeneratorsTest extends TestCase {
     runGeneratorTests(g, new DTBuilder(2007, 11, 1), "month", "2, 6, 8, 10");
   }
 
+  @Test
   public void testByYearGenerator() throws Exception {
     runGeneratorTests(
         Generators.byYearGenerator(new int[] { 1066, 1492, 1876, 1975, 2006 },
@@ -196,6 +197,7 @@ public class GeneratorsTest extends TestCase {
         new DTBuilder(1900, 7, 1), "year", "1975, 2006");
   }
 
+  @Test
   public void testSerialDayGenerator() throws Exception {
     runGeneratorTests(
         Generators.serialDayGenerator(
@@ -236,6 +238,7 @@ public class GeneratorsTest extends TestCase {
     runGeneratorTests(g2, new DTBuilder(2006, 5, 1), "day", "16");
   }
 
+  @Test
   public void testSerialMonthGenerator() throws Exception {
     runGeneratorTests(
         Generators.serialMonthGenerator(
@@ -263,6 +266,7 @@ public class GeneratorsTest extends TestCase {
     runGeneratorTests(g2, new DTBuilder(2009, 6, 1), "month", "4");
   }
 
+  @Test
   public void testSerialYearGenerator() throws Exception {
     runGeneratorTests(
         Generators.serialYearGenerator(
@@ -274,6 +278,7 @@ public class GeneratorsTest extends TestCase {
         new DTBuilder(2006, 1, 1), "year", "2006, 2008, 2010, 2012, 2014", 5);
   }
 
+  @Test
   public void testSerialHourGeneratorGivenDate() throws Exception {
     DateValue dtStart = new DateValueImpl(2011, 8, 8);
     Generator g = Generators.serialHourGenerator(7, dtStart);
@@ -296,6 +301,7 @@ public class GeneratorsTest extends TestCase {
     assertEquals("2011-8-11 5:0:0", b.toString());
   }
 
+  @Test
   public void testSerialHourGeneratorGivenTime() throws Exception {
     DateValue dtStart = new DateTimeValueImpl(2011, 8, 8, 1, 25, 30);
     Generator g = Generators.serialHourGenerator(7, dtStart);
@@ -318,6 +324,7 @@ public class GeneratorsTest extends TestCase {
     assertEquals("2011-8-11 6:25:30", b.toString());
   }
 
+  @Test
   public void testSerialHourGeneratorRolledBack() throws Exception {
     DateValue dtStart = new DateTimeValueImpl(2011, 8, 8, 1, 25, 30);
     Generator g = Generators.serialHourGenerator(7, dtStart);
@@ -340,6 +347,7 @@ public class GeneratorsTest extends TestCase {
     assertEquals("2011-8-4 6:29:50", b.toString());
   }
 
+  @Test
   public void testByHourGeneratorGivenDate() throws Exception {
     DateValue dtStart = new DateValueImpl(2011, 8, 8);
     Generator g = Generators.byHourGenerator(new int[] { 3, 9, 11 }, dtStart);
@@ -364,6 +372,7 @@ public class GeneratorsTest extends TestCase {
     assertEquals("2011-9-9 3:0:0", b.toString());
   }
 
+  @Test
   public void testByHourGeneratorGivenDateTime() throws Exception {
     DateValue dtStart = new DateTimeValueImpl(2011, 8, 8, 3, 11, 12);
     Generator g = Generators.byHourGenerator(new int[] { 3, 9, 11 }, dtStart);
@@ -388,6 +397,7 @@ public class GeneratorsTest extends TestCase {
     assertEquals("2011-9-9 3:11:12", b.toString());
   }
 
+  @Test
   public void testSingleByHourGeneratorGivenDateTime() throws Exception {
     DateValue dtStart = new DateTimeValueImpl(2011, 8, 8, 3, 11, 12);
     Generator g = Generators.byHourGenerator(new int[] { 7 }, dtStart);
@@ -402,6 +412,7 @@ public class GeneratorsTest extends TestCase {
     assertEquals("2011-9-9 7:11:12", b.toString());
   }
 
+  @Test
   public void testSerialMinuteGeneratorBigInterval() throws Exception {
     DateValue dtStart = new DateTimeValueImpl(2011, 8, 8, 15, 30, 0);
     Generator g = Generators.serialMinuteGenerator(100, dtStart);
@@ -455,6 +466,7 @@ public class GeneratorsTest extends TestCase {
     assertEquals("2011-8-11 6:50:0", b.toString());
   }
 
+  @Test
   public void testSerialMinuteGeneratorSmallInterval() throws Exception {
     DateValue dtStart = new DateValueImpl(2011, 8, 8);
     Generator g = Generators.serialMinuteGenerator(15, dtStart);
@@ -473,6 +485,7 @@ public class GeneratorsTest extends TestCase {
     assertEquals("2011-8-8 1:0:0", b.toString());
   }
 
+  @Test
   public void testByMinuteGenerator() throws Exception {
     DateValue dtStart = new DateTimeValueImpl(2011, 8, 8, 5, 0, 17);
     Generator g = Generators.byMinuteGenerator(
@@ -490,6 +503,7 @@ public class GeneratorsTest extends TestCase {
     assertEquals("2011-8-8 6:3:17", b.toString());
   }
 
+  @Test
   public void testSingleByMinuteGenerator() throws Exception {
     DateValue dtStart = new DateTimeValueImpl(2011, 8, 8, 5, 30, 17);
     Generator g = Generators.byMinuteGenerator(new int[0], dtStart);
@@ -507,6 +521,7 @@ public class GeneratorsTest extends TestCase {
     assertFalse(g.generate(b));
   }
 
+  @Test
   public void testSerialSecondGenerator() throws Exception {
     DateValue dtStart = new DateTimeValueImpl(2011, 8, 8, 19, 1, 23);
     Generator g = Generators.serialSecondGenerator(25, dtStart);
@@ -531,6 +546,7 @@ public class GeneratorsTest extends TestCase {
     assertEquals("2011-8-8 19:4:18", b.toString());
   }
 
+  @Test
   public void testBySecondGenerator() throws Exception {
     DateValue dtStart = new DateTimeValueImpl(2011, 8, 8, 19, 1, 23);
     Generator g = Generators.bySecondGenerator(
@@ -546,6 +562,7 @@ public class GeneratorsTest extends TestCase {
     assertEquals("2011-8-8 19:2:2", b.toString());
   }
 
+  @Test
   public void testSingleBySecondGenerator() throws Exception {
     DateValue dtStart = new DateTimeValueImpl(2011, 8, 8, 19, 1, 23);
     Generator g = Generators.bySecondGenerator(new int[0], dtStart);

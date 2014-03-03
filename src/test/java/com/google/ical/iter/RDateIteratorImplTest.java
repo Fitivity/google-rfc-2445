@@ -14,46 +14,45 @@
 
 package com.google.ical.iter;
 
-import com.google.ical.values.RDateList;
 import com.google.ical.values.DateValue;
+import com.google.ical.values.RDateList;
+import org.junit.Before;
+import org.junit.Test;
+
 import java.util.TimeZone;
 
-import junit.framework.TestCase;
-
+import static org.junit.Assert.assertEquals;
 /**
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class RDateIteratorImplTest extends TestCase {
+public class RDateIteratorImplTest {
 
   static final TimeZone PST = TimeZone.getTimeZone("America/Los_Angeles");
   static final TimeZone EST = TimeZone.getTimeZone("America/New_York");
   static final TimeZone UTC = TimeZone.getTimeZone("Etc/GMT");
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
+  @Before
+  public void setUp() throws Exception {
     assertEquals(-8 * 60 * 60 * 1000, PST.getRawOffset());
     assertEquals(-5 * 60 * 60 * 1000, EST.getRawOffset());
     assertEquals(0, UTC.getRawOffset());
   }
 
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-  }
-
+  @Test
   public void testOneDate() throws Exception {
     runRecurrenceIteratorTest("RDATE:20060412", PST, "20060412");
     runRecurrenceIteratorTest("RDATE:20060412", EST, "20060412");
     runRecurrenceIteratorTest("RDATE:20060412", UTC, "20060412");
   }
 
+  @Test
   public void testOneDateTime() throws Exception {
     runRecurrenceIteratorTest("RDATE:20060412T120000", PST, "20060412T190000");
     runRecurrenceIteratorTest("RDATE:20060412T120000", EST, "20060412T160000");
     runRecurrenceIteratorTest("RDATE:20060412T120000", UTC, "20060412T120000");
   }
 
+  @Test
   public void testMore() throws Exception {
     runRecurrenceIteratorTest("RDATE:20060412,20060412", PST, "20060412");
     runRecurrenceIteratorTest(

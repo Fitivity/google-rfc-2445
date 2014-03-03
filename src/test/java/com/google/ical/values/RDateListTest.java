@@ -14,31 +14,27 @@
 
 package com.google.ical.values;
 
-import com.google.ical.values.DateTimeValueImpl;
-import com.google.ical.values.DateValueImpl;
+import org.junit.Before;
+import org.junit.Test;
 
-import junit.framework.TestCase;
 import java.util.TimeZone;
 
+import static org.junit.Assert.assertEquals;
 /**
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class RDateListTest extends TestCase {
+public class RDateListTest  {
 
   private static final TimeZone PST =
     TimeZone.getTimeZone("America/Los_Angeles");
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
+  @Before
+  public void setUp() throws Exception {
     assertEquals(-8 * 60 * 60 * 1000, PST.getRawOffset());
   }
 
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-  }
 
+  @Test
   public void testRDateListParsing() throws Exception {
     RDateList rd1 = new RDateList("RDATE:20060412", PST);
     RDateList rd2 = new RDateList("RDATE:20060412T120000", PST);
@@ -56,6 +52,7 @@ public class RDateListTest extends TestCase {
                  rd3.getDatesUtc()[1]);
   }
 
+  @Test
   public void testRDateListParsingWithExplicitTzid() throws Exception {
     RDateList rd = new RDateList(
         "RDATE;TZID=\"America/New_York\":20060412T120000", PST);
@@ -64,6 +61,7 @@ public class RDateListTest extends TestCase {
                  rd.getDatesUtc()[0]);
   }
 
+  @Test
   public void testRDateIcal() throws Exception {
     RDateList rd1 = new RDateList("RDATE:20060412", PST);
     RDateList rd2 = new RDateList("RDATE:20060412T120000", PST);
@@ -83,6 +81,7 @@ public class RDateListTest extends TestCase {
                  rd4.toIcal());
   }
 
+  @Test
   public void testRDateIcalWithXParams() throws Exception {
     RDateList rd = new RDateList(
         "RDATE;tzid=\"America/Los_Angeles\";X-FOO=BAR:20060412", PST);

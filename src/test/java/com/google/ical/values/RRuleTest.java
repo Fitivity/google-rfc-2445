@@ -14,20 +14,22 @@
 
 package com.google.ical.values;
 
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import junit.framework.TestCase;
 
 /**
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class RRuleTest extends TestCase {
+public class RRuleTest  {
 
   /**
    * Test that the RRule parser is re-entrant.
    * See http://code.google.com/p/google-rfc-2445/issues/detail?id=2
    */
+  @Test
   public void testThreadSafety() throws Throwable {
     int nThreads = 10;
     final int nRuns = 10000;

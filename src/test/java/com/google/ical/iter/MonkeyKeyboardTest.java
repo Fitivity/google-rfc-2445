@@ -24,6 +24,13 @@ import com.google.ical.values.RRule;
 import com.google.ical.values.TimeValue;
 import com.google.ical.values.Weekday;
 import com.google.ical.values.WeekdayNum;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,14 +39,13 @@ import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import junit.framework.TestCase;
-
+import static org.junit.Assert.assertTrue;
 /**
  * simulate a large number of monkeys banging on a calendar.
  *
  * @author mikesamuel@gmail.com (Mike Samuel)
  */
-public class MonkeyKeyboardTest extends TestCase {
+public class MonkeyKeyboardTest {
 
   static final TimeZone PST = TimeZone.getTimeZone("America/Los_Angeles");
 
@@ -48,23 +54,28 @@ public class MonkeyKeyboardTest extends TestCase {
   long seed;
   Random rnd;
   DateValue refDate;
+  String testName;
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
+  @Rule
+  public TestRule watcher = new TestWatcher() {
+    protected void starting(Description description) {
+      testName = description.getMethodName();
+    }
+  };
+
+  @Before
+  public void setUp() throws Exception {
     seed = null != rnd ? rnd.nextLong() : System.currentTimeMillis();
-    System.out.println("RANDOM SEED " + seed + " : " + getName());
+    System.out.println("RANDOM SEED " + seed + " : " + testName);
     rnd = new Random(seed);
     refDate = new DTBuilder(1900 + rnd.nextInt(200), 1, rnd.nextInt(366) + 1)
         .toDate();
   }
 
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-  }
 
-  public void testTimeGoesForward() throws Throwable {
+  @Ignore
+  @Test
+    public void testTimeGoesForward() throws Throwable {
     for (int i = 0; i < 1000; ++i) {
       System.err.print("<");
       DumpStackTask task = dumpStackIfRunsTooLong();
@@ -109,6 +120,7 @@ public class MonkeyKeyboardTest extends TestCase {
     }
   }
 
+  @Test
   public void testNoExceptionsThrownOnWelformedRrules() throws Throwable {
     final int nRuns = 1000;
     final int countLimit = 2000;

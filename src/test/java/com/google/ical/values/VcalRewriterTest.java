@@ -14,23 +14,16 @@
 
 package com.google.ical.values;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 /**
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class VcalRewriterTest extends TestCase {
+public class VcalRewriterTest  {
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-  }
 
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-  }
-
+  @Test
   public void testRewriteRule() throws Exception {
     // Daily for the rest of 2002
     assertEquals("RRULE:FREQ=DAILY;UNTIL=20021231T000000Z",
@@ -91,6 +84,7 @@ public class VcalRewriterTest extends TestCase {
                  VcalRewriter.rewriteRule("RRULE:YD2 243 #0"));
   }
 
+  @Test
   public void testRewriteDoesntInterfere() throws Exception {
     assertEquals("RRULE:FREQ=YEARLY;INTERVAL=2;BYYEARDAY=243",
                  VcalRewriter.rewriteRule(

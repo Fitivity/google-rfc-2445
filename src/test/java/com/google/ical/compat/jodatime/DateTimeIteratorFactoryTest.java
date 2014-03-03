@@ -17,20 +17,23 @@ package com.google.ical.compat.jodatime;
 import com.google.ical.values.DateTimeValue;
 import com.google.ical.values.DateTimeValueImpl;
 import com.google.ical.values.DateValueImpl;
-import junit.framework.TestCase;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * testcases for {@link DateTimeIteratorFactory}.
  *
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class DateTimeIteratorFactoryTest extends TestCase {
+public class DateTimeIteratorFactoryTest {
 
   private static final DateTimeZone PST =
     DateTimeZone.forID("America/Los_Angeles");
 
+  @Test
   public void testDateValueToDateTime() throws Exception {
     assertEquals(dateTime(2006, 10, 13, 0, 0, 0),
                  DateTimeIteratorFactory.dateValueToDateTime(
@@ -40,7 +43,8 @@ public class DateTimeIteratorFactoryTest extends TestCase {
                      new DateTimeValueImpl(2006, 10, 13, 12, 30, 1)));
   }
 
-  public void testDateToDateTimeValue() throws Exception {
+    @Test
+    public void testDateToDateTimeValue() throws Exception {
     assertEquals(new DateTimeValueImpl(2006, 10, 13, 0, 0, 0),
                  DateTimeIteratorFactory.dateTimeToDateValue(
                      dateTime(2006, 10, 13, 0, 0, 0)));
@@ -49,13 +53,15 @@ public class DateTimeIteratorFactoryTest extends TestCase {
                      dateTime(2006, 10, 13, 12, 30, 1)));
   }
 
-  public void testConsistency() throws Exception {
+    @Test
+    public void testConsistency() throws Exception {
     DateTimeValue dtv = new DateTimeValueImpl(2006, 10, 13, 12, 30, 1);
     assertEquals(dtv, DateTimeIteratorFactory.dateTimeToDateValue(
                      DateTimeIteratorFactory.dateValueToDateTime(dtv)));
   }
 
-  public void testCreateDateTimeIterableTimed() throws Exception {
+    @Test
+    public void testCreateDateTimeIterableTimed() throws Exception {
     DateTimeIterable iterable = DateTimeIteratorFactory.createDateTimeIterable(
         "RRULE:FREQ=DAILY;INTERVAL=2;COUNT=8\n"
         + "EXDATE:20060103T123001,20060105T123001,20060107,20060113T123001",

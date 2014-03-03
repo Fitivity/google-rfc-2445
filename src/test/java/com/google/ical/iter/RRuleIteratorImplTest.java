@@ -20,27 +20,23 @@ import com.google.ical.values.DateValue;
 import com.google.ical.values.IcalParseUtil;
 import com.google.ical.values.PeriodValue;
 import com.google.ical.values.RRule;
-import junit.framework.TestCase;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.util.TimeZone;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class RRuleIteratorImplTest extends TestCase {
+public class RRuleIteratorImplTest {
 
   static final TimeZone PST = TimeZone.getTimeZone("America/Los_Angeles");
   static final TimeZone UTC = TimeUtils.utcTimezone();
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-  }
-
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-  }
 
   private void runRecurrenceIteratorTest(
       String rruleText, DateValue dtStart, int limit, String golden)
@@ -86,6 +82,7 @@ public class RRuleIteratorImplTest extends TestCase {
     }
   }
 
+  @Test
   public void testFrequencyLimits() throws Exception {
     RecurrenceIteratorFactory.createRecurrenceIterator(
         new RRule(
@@ -96,24 +93,28 @@ public class RRuleIteratorImplTest extends TestCase {
             IcalParseUtil.parseDateValue("20000101"), TimeUtils.utcTimezone());
   }
 
+  @Test
   public void testSimpleDaily() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=DAILY", IcalParseUtil.parseDateValue("20060120"), 5,
         "20060120,20060121,20060122,20060123,20060124,...");
   }
 
+  @Test
   public void testSimpleWeekly() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=WEEKLY", IcalParseUtil.parseDateValue("20060120"), 5,
         "20060120,20060127,20060203,20060210,20060217,...");
   }
 
+  @Test
   public void testSimpleMonthly() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MONTHLY", IcalParseUtil.parseDateValue("20060120"), 5,
         "20060120,20060220,20060320,20060420,20060520,...");
   }
 
+  @Test
   public void testSimpleYearly() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY", IcalParseUtil.parseDateValue("20060120"), 5,
@@ -121,6 +122,7 @@ public class RRuleIteratorImplTest extends TestCase {
   }
 
   // from section 4.3.10
+  @Test
   public void testMultipleByParts() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY;INTERVAL=2;BYMONTH=1;BYDAY=SU",
@@ -129,6 +131,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19990103,19990110,19990117,19990124,...");
   }
 
+  @Test
   public void testCountWithInterval() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=DAILY;COUNT=10;INTERVAL=2",
@@ -138,6 +141,7 @@ public class RRuleIteratorImplTest extends TestCase {
   }
 
   // from section 4.6.5
+  @Test
   public void testNegativeOffsets() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10",
@@ -153,6 +157,7 @@ public class RRuleIteratorImplTest extends TestCase {
   }
 
   // from section 4.8.5.4
+  @Test
   public void testDailyFor10Occ() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=DAILY;COUNT=10",
@@ -163,6 +168,7 @@ public class RRuleIteratorImplTest extends TestCase {
 
   }
 
+  @Test
   public void testDailyUntilDec4() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=DAILY;UNTIL=19971204",
@@ -170,6 +176,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19971128,19971129,19971130,19971201,19971202,19971203,19971204");
   }
 
+  @Test
   public void testEveryOtherDayForever() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=DAILY;INTERVAL=2",
@@ -177,6 +184,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19971128,19971130,19971202,19971204,19971206,...");
   }
 
+  @Test
   public void testEvery10Days5Occ() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=DAILY;INTERVAL=10;COUNT=5",
@@ -202,6 +210,7 @@ public class RRuleIteratorImplTest extends TestCase {
     return out.toString();
   }
 
+  @Test
   public void testEveryDayInJanuaryFor3Years() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY;UNTIL=20000131T090000Z;\n" +
@@ -212,6 +221,7 @@ public class RRuleIteratorImplTest extends TestCase {
         + goldenDateRange("20000101/20000131"));
   }
 
+  @Test
   public void testWeeklyFor10Occ() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=WEEKLY;COUNT=10",
@@ -220,6 +230,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19971007,19971014,19971021,19971028,19971104");
   }
 
+  @Test
   public void testWeeklyUntilDec24() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=WEEKLY;UNTIL=19971224",
@@ -230,6 +241,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19971216,19971223");
   }
 
+  @Test
   public void testEveryOtherWeekForever() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=WEEKLY;INTERVAL=2;WKST=SU",
@@ -239,6 +251,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19980120,...");
   }
 
+  @Test
   public void testWeeklyOnTuesdayAndThursdayFor5Weeks() throws Exception {
     // if UNTIL date does not match start date, then until date treated as
     // occurring on midnight.
@@ -261,6 +274,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19970918,19970923,19970925,19970930,19971002");
   }
 
+  @Test
   public void testEveryOtherWeekOnMWFUntilDec24() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=WEEKLY;INTERVAL=2;UNTIL=19971224T000000Z;WKST=SU;\n" +
@@ -301,6 +315,7 @@ public class RRuleIteratorImplTest extends TestCase {
         PST);
   }
 
+  @Test
   public void testEveryOtherWeekOnTuThFor8Occ() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=WEEKLY;INTERVAL=2;COUNT=8;WKST=SU;BYDAY=TU,TH",
@@ -309,6 +324,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19971002,19971014,19971016");
   }
 
+  @Test
   public void testMonthlyOnThe1stFridayFor10Occ() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MONTHLY;COUNT=10;BYDAY=1FR",
@@ -317,6 +333,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19980206,19980306,19980403,19980501,19980605");
   }
 
+  @Test
   public void testMonthlyOnThe1stFridayUntilDec24() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MONTHLY;UNTIL=19971224T000000Z;BYDAY=1FR",
@@ -324,6 +341,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19970905,19971003,19971107,19971205");
   }
 
+  @Test
   public void testEveryOtherMonthOnThe1stAndLastSundayFor10Occ()
       throws Exception {
     runRecurrenceIteratorTest(
@@ -333,6 +351,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19980125,19980301,19980329,19980503,19980531");
   }
 
+  @Test
   public void testMonthlyOnTheSecondToLastMondayOfTheMonthFor6Months()
       throws Exception {
     runRecurrenceIteratorTest(
@@ -342,6 +361,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19980216");
   }
 
+  @Test
   public void testMonthlyOnTheThirdToLastDay() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MONTHLY;BYMONTHDAY=-3",
@@ -349,6 +369,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19970928,19971029,19971128,19971229,19980129,19980226,...");
   }
 
+  @Test
   public void testMonthlyOnThe2ndAnd15thFor10Occ() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MONTHLY;COUNT=10;BYMONTHDAY=2,15",
@@ -357,6 +378,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19971115,19971202,19971215,19980102,19980115");
   }
 
+  @Test
   public void testMonthlyOnTheFirstAndLastFor10Occ() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MONTHLY;COUNT=10;BYMONTHDAY=1,-1",
@@ -365,6 +387,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19971201,19971231,19980101,19980131,19980201");
   }
 
+  @Test
   public void testEvery18MonthsOnThe10thThru15thFor10Occ() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MONTHLY;INTERVAL=18;COUNT=10;BYMONTHDAY=10,11,12,13,14,\n" +
@@ -374,6 +397,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19970915,19990310,19990311,19990312,19990313");
   }
 
+  @Test
   public void testEveryTuesdayEveryOtherMonth() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MONTHLY;INTERVAL=2;BYDAY=TU",
@@ -384,6 +408,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19980317,19980324,19980331,...");
   }
 
+  @Test
   public void testYearlyInJuneAndJulyFor10Occurrences() throws Exception {
     // Note: Since none of the BYDAY, BYMONTHDAY or BYYEARDAY components
     // are specified, the day is gotten from DTSTART
@@ -394,6 +419,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19990710,20000610,20000710,20010610,20010710");
   }
 
+  @Test
   public void testEveryOtherYearOnJanuaryFebruaryAndMarchFor10Occurrences()
       throws Exception {
     runRecurrenceIteratorTest(
@@ -403,6 +429,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "20010210,20010310,20030110,20030210,20030310");
   }
 
+  @Test
   public void testEvery3rdYearOnThe1st100thAnd200thDayFor10Occurrences()
       throws Exception {
     runRecurrenceIteratorTest(
@@ -412,6 +439,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "20000718,20030101,20030410,20030719,20060101");
   }
 
+  @Test
   public void testEvery20thMondayOfTheYearForever() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY;BYDAY=20MO",
@@ -419,6 +447,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19970519,19980518,19990517,...");
   }
 
+  @Test
   public void testMondayOfWeekNumber20WhereTheDefaultStartOfTheWeekIsMonday()
       throws Exception {
     runRecurrenceIteratorTest(
@@ -427,6 +456,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19970512,19980511,19990517,...");
   }
 
+  @Test
   public void testEveryThursdayInMarchForever() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=TH",
@@ -436,6 +466,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19990325,...");
   }
 
+  @Test
   public void testEveryThursdayButOnlyDuringJuneJulyAndAugustForever()
       throws Exception {
     runRecurrenceIteratorTest(
@@ -451,6 +482,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19990805,19990812,19990819,19990826,...");
   }
 
+  @Test
   public void testEveryFridayThe13thForever() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MONTHLY;BYDAY=FR;BYMONTHDAY=13",
@@ -459,6 +491,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "...");
   }
 
+  @Test
   public void testTheFirstSaturdayThatFollowsTheFirstSundayOfTheMonthForever()
       throws Exception {
     runRecurrenceIteratorTest(
@@ -469,6 +502,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "...");
   }
 
+  @Test
   public void testEvery4YearsThe1stTuesAfterAMonInNovForever()
       throws Exception {
     // US Presidential Election Day
@@ -479,6 +513,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19961105,20001107,20041102,...");
   }
 
+  @Test
   public void testThe3rdInstanceIntoTheMonthOfOneOfTuesWedThursForNext3Months()
       throws Exception {
     runRecurrenceIteratorTest(
@@ -487,6 +522,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19970904,19971007,19971106");
   }
 
+  @Test
   public void testThe2ndToLastWeekdayOfTheMonth() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=-2",
@@ -495,6 +531,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19980226,19980330,...");
   }
 
+  @Test
   public void testEvery3HoursFrom900AmTo500PmOnASpecificDay() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=HOURLY;INTERVAL=3;UNTIL=19970903T090000Z",
@@ -504,6 +541,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19970903T030000,19970903T060000,19970903T090000");
   }
 
+  @Test
   public void testEvery15MinutesFor6Occurrences() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MINUTELY;INTERVAL=15;COUNT=6",
@@ -512,6 +550,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19970902T100000,19970902T101500");
   }
 
+  @Test
   public void testEveryHourAndAHalfFor4Occurrences() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MINUTELY;INTERVAL=90;COUNT=4",
@@ -519,27 +558,28 @@ public class RRuleIteratorImplTest extends TestCase {
         "19970902T090000,19970902T103000,19970902T120000,19970902T133000");
   }
 
+  @Test
   public void testEvert20MinutesFrom900AMto440PMEveryDay() throws Exception {
     runRecurrenceIteratorTest(
-        "RRULE:FREQ=DAILY;BYHOUR=9,10,11,12,13,14,15,16;BYMINUTE=0,20,40",
-        IcalParseUtil.parseDateValue("19970902T090000"), 48,
-        "19970902T090000,19970902T092000,19970902T094000,"
-        + "19970902T100000,19970902T102000,19970902T104000,"
-        + "19970902T110000,19970902T112000,19970902T114000,"
-        + "19970902T120000,19970902T122000,19970902T124000,"
-        + "19970902T130000,19970902T132000,19970902T134000,"
-        + "19970902T140000,19970902T142000,19970902T144000,"
-        + "19970902T150000,19970902T152000,19970902T154000,"
-        + "19970902T160000,19970902T162000,19970902T164000,"
-        + "19970903T090000,19970903T092000,19970903T094000,"
-        + "19970903T100000,19970903T102000,19970903T104000,"
-        + "19970903T110000,19970903T112000,19970903T114000,"
-        + "19970903T120000,19970903T122000,19970903T124000,"
-        + "19970903T130000,19970903T132000,19970903T134000,"
-        + "19970903T140000,19970903T142000,19970903T144000,"
-        + "19970903T150000,19970903T152000,19970903T154000,"
-        + "19970903T160000,19970903T162000,19970903T164000,"
-        + "...");
+            "RRULE:FREQ=DAILY;BYHOUR=9,10,11,12,13,14,15,16;BYMINUTE=0,20,40",
+            IcalParseUtil.parseDateValue("19970902T090000"), 48,
+            "19970902T090000,19970902T092000,19970902T094000,"
+                    + "19970902T100000,19970902T102000,19970902T104000,"
+                    + "19970902T110000,19970902T112000,19970902T114000,"
+                    + "19970902T120000,19970902T122000,19970902T124000,"
+                    + "19970902T130000,19970902T132000,19970902T134000,"
+                    + "19970902T140000,19970902T142000,19970902T144000,"
+                    + "19970902T150000,19970902T152000,19970902T154000,"
+                    + "19970902T160000,19970902T162000,19970902T164000,"
+                    + "19970903T090000,19970903T092000,19970903T094000,"
+                    + "19970903T100000,19970903T102000,19970903T104000,"
+                    + "19970903T110000,19970903T112000,19970903T114000,"
+                    + "19970903T120000,19970903T122000,19970903T124000,"
+                    + "19970903T130000,19970903T132000,19970903T134000,"
+                    + "19970903T140000,19970903T142000,19970903T144000,"
+                    + "19970903T150000,19970903T152000,19970903T154000,"
+                    + "19970903T160000,19970903T162000,19970903T164000,"
+                    + "...");
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MINUTELY;INTERVAL=20;BYHOUR=9,10,11,12,13,14,15,16",
         IcalParseUtil.parseDateValue("19970902T090000"), 48,
@@ -562,6 +602,7 @@ public class RRuleIteratorImplTest extends TestCase {
         + "...");
   }
 
+  @Test
   public void testAnExampleWhereTheDaysGeneratedMakesADifferenceBecauseOfWkst()
       throws Exception {
     runRecurrenceIteratorTest(
@@ -570,6 +611,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19970805,19970810,19970819,19970824");
   }
 
+  @Test
   public void testAnExampleWhereTheDaysGeneratedMakesADifferenceBecauseOfWkst2()
       throws Exception {
     runRecurrenceIteratorTest(
@@ -578,6 +620,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19970805,19970817,19970819,19970831");
   }
 
+  @Test
   public void testWithByDayAndByMonthDayFilter() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=WEEKLY;COUNT=4;BYDAY=TU,SU;" +
@@ -586,6 +629,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19970817,19970819,19970914,19970916");
   }
 
+  @Test
   public void testAnnuallyInAugustOnTuesAndSunBetween13thAnd20th()
       throws Exception {
     runRecurrenceIteratorTest(
@@ -595,6 +639,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19970817,19970819,19980816,19980818");
   }
 
+  @Test
   public void testLastDayOfTheYearIsASundayOrTuesday()
       throws Exception {
     runRecurrenceIteratorTest(
@@ -603,6 +648,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19951231,19961231,20001231,20021231");
   }
 
+  @Test
   public void testLastWeekdayOfMonth() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MONTHLY;BYSETPOS=-1;BYDAY=-1MO,-1TU,-1WE,-1TH,-1FR",
@@ -611,6 +657,7 @@ public class RRuleIteratorImplTest extends TestCase {
         + "19941031,19941130,19941230,19950131,...");
   }
 
+  @Test
   public void testMonthsThatStartOrEndOnFriday() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MONTHLY;BYMONTHDAY=1,-1;BYDAY=FR;COUNT=6",
@@ -618,6 +665,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19940701,19940930,19950331,19950630,19950901,19951201");
   }
 
+  @Test
   public void testMonthsThatStartOrEndOnFridayOnEvenWeeks() throws Exception {
     // figure out which of the answers from the above fall on even weeks
     DateValue dtStart = IcalParseUtil.parseDateValue("19940603");
@@ -641,6 +689,7 @@ public class RRuleIteratorImplTest extends TestCase {
         dtStart, 8, golden.toString());
   }
 
+  @Test
   public void testCenturiesThatAreNotLeapYears() throws Exception {
     // I can't think of a good reason anyone would want to specify both a
     // month day and a year day, so here's a really contrived example
@@ -650,6 +699,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19000301,21000301,22000301,23000301,...");
   }
 
+  @Test
   public void testNextCalledWithoutHasNext() throws Exception {
     RecurrenceIterator riter =
       RecurrenceIteratorFactory.createRecurrenceIterator(
@@ -660,6 +710,7 @@ public class RRuleIteratorImplTest extends TestCase {
     assertEquals(IcalParseUtil.parseDateValue("20000103"), riter.next());
   }
 
+  @Test
   public void testNoInstancesGenerated() throws Exception {
     RecurrenceIterator riter =
       RecurrenceIteratorFactory.createRecurrenceIterator(
@@ -672,6 +723,7 @@ public class RRuleIteratorImplTest extends TestCase {
     assertNull(riter.next());
   }
 
+  @Test
   public void testNoInstancesGenerated2() throws Exception {
     RecurrenceIterator riter =
       RecurrenceIteratorFactory.createRecurrenceIterator(
@@ -680,6 +732,7 @@ public class RRuleIteratorImplTest extends TestCase {
     assertTrue(!riter.hasNext());
   }
 
+  @Test
   public void testNoInstancesGenerated3() throws Exception {
     RecurrenceIterator riter =
       RecurrenceIteratorFactory.createRecurrenceIterator(
@@ -688,6 +741,7 @@ public class RRuleIteratorImplTest extends TestCase {
     assertTrue(!riter.hasNext());
   }
 
+  @Test
   public void testLastWeekdayOfMarch() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MONTHLY;BYMONTH=3;BYDAY=SA,SU;BYSETPOS=-1",
@@ -695,6 +749,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "20000326,20010331,20020331,20030330,...");
   }
 
+  @Test
   public void testFirstWeekdayOfMarch() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MONTHLY;BYMONTH=3;BYDAY=SA,SU;BYSETPOS=1",
@@ -728,6 +783,7 @@ public class RRuleIteratorImplTest extends TestCase {
    * The first week of the year may be partial, and the first week is considered
    * to be the first one with at least four days.
    */
+  @Test
   public void testFirstWeekdayOfFirstWeekOfYear() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY;BYWEEKNO=1;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=1",
@@ -735,6 +791,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19990104,20000103,20010101,20020101,...");
   }
 
+  @Test
   public void testFirstSundayOfTheYear1() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY;BYWEEKNO=1;BYDAY=SU",
@@ -742,6 +799,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19990110,20000109,20010107,20020106,...");
   }
 
+  @Test
   public void testFirstSundayOfTheYear2() throws Exception {
     // TODO(msamuel): is this right?
     runRecurrenceIteratorTest(
@@ -750,6 +808,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19990103,20000102,20010107,20020106,...");
   }
 
+  @Test
   public void testFirstSundayOfTheYear3() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY;BYDAY=SU;BYYEARDAY=1,2,3,4,5,6,7,8,9,10,11,12,13"
@@ -758,6 +817,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19990103,20000102,20010107,20020106,...");
   }
 
+  @Test
   public void testFirstWeekdayOfYear() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=1",
@@ -765,7 +825,8 @@ public class RRuleIteratorImplTest extends TestCase {
         "19990101,20000103,20010101,20020101,...");
   }
 
-  public void testLastWeekdayOfFirstWeekOfYear() throws Exception {
+  @Test
+   public void testLastWeekdayOfFirstWeekOfYear() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY;BYWEEKNO=1;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=-1",
         IcalParseUtil.parseDateValue("19990101"), 4,
@@ -780,6 +841,7 @@ public class RRuleIteratorImplTest extends TestCase {
   // 18 19 20 21 22 23 24
   // 25 26 27 28 29 30 31
 
+  @Test
   public void testSecondWeekday1() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=2",
@@ -795,6 +857,7 @@ public class RRuleIteratorImplTest extends TestCase {
   // 20 21 22 23 24 25 26
   // 27 28 29 30 31
 
+  @Test
   public void testSecondWeekday2() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=2",
@@ -802,6 +865,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19970102,19970107,19970114,19970121,...");
   }
 
+  @Test
   public void testByYearDayAndByDayFilterInteraction() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY;BYYEARDAY=15;BYDAY=3MO",
@@ -809,6 +873,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "20010115,20070115,20180115,20240115,...");
   }
 
+  @Test
   public void testByDayWithNegWeekNoAsFilter() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MONTHLY;BYMONTHDAY=26;BYDAY=-1FR",
@@ -816,6 +881,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19990226,19990326,19991126,20000526,...");
   }
 
+  @Test
   public void testLastWeekOfTheYear() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY;BYWEEKNO=-1",
@@ -823,6 +889,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19991227,19991228,19991229,19991230,19991231,20001225,...");
   }
 
+  @Test
   public void testUserSubmittedTest1() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=WEEKLY;INTERVAL=2;WKST=WE;BYDAY=SU,TU,TH,SA"
@@ -832,6 +899,7 @@ public class RRuleIteratorImplTest extends TestCase {
         + "20000210T033000,20000212T033000,20000213T033000,20000215T033000");
   }
 
+  @Test
   public void testAdvanceTo() throws Exception {
     // a bunch of tests grabbed from above with an advance-to date tacked on
 
@@ -949,6 +1017,7 @@ public class RRuleIteratorImplTest extends TestCase {
   }
 
   /** a testcase that yielded dupes due to bysetPos evilness */
+  @Test
   public void testCaseThatYieldedDupes() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=WEEKLY;WKST=SU;INTERVAL=1;BYMONTH=9,1,12,8"
@@ -985,6 +1054,7 @@ public class RRuleIteratorImplTest extends TestCase {
         + "21200922,21210803,21210824,21220823,...");
   }
 
+  @Test
   public void testHourlyWithByday() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=HOURLY;INTERVAL=6;BYDAY=TU,TH;COUNT=5",
@@ -993,6 +1063,7 @@ public class RRuleIteratorImplTest extends TestCase {
         + "20110811T063000,20110811T123000");
   }
 
+  @Test
   public void testHourlyWithBydayAcrossMonthBoundary() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=HOURLY;INTERVAL=6;BYDAY=TU,TH;COUNT=5",
@@ -1001,6 +1072,7 @@ public class RRuleIteratorImplTest extends TestCase {
         + "20110906T003000");
   }
 
+  @Test
   public void testHourlyWithByMonthday() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=HOURLY;INTERVAL=6;BYMONTHDAY=9;COUNT=5",
@@ -1009,6 +1081,7 @@ public class RRuleIteratorImplTest extends TestCase {
         + "20110909T063000,20110909T123000");
   }
 
+  @Test
   public void testWeirdByMonth() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=YEARLY;INTERVAL=1;BYMONTH=2,7,4,9,9,6,11,1",
@@ -1017,6 +1090,7 @@ public class RRuleIteratorImplTest extends TestCase {
         + "19500120,19500220,19500420,19500620,19500720,19500920,19501120,...");
   }
 
+  @Test
   public void testMonkeyByMinute1() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=DAILY;INTERVAL=1;BYMINUTE=19,27,38,1,5",
@@ -1024,6 +1098,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19360508T001941,19360508T002741,19360508T003841,...");
   }
 
+  @Test
   public void testMonkeyByMinute2() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=MINUTELY;WKST=SU;INTERVAL=1;BYMONTH=10,12"
@@ -1036,6 +1111,7 @@ public class RRuleIteratorImplTest extends TestCase {
         "19391009T000226,19391009T000231,19391009T000251,...");
   }
 
+  @Test
   public void testMonkeyBySecondSetPos() throws Exception {
     runRecurrenceIteratorTest(
         "RRULE:FREQ=WEEKLY;COUNT=13;INTERVAL=1;BYDAY=MO,SA,SU,FR"
@@ -1046,6 +1122,7 @@ public class RRuleIteratorImplTest extends TestCase {
         + "19090501T075748,19090502T075706,19090507T075706,...");
   }
 
+  @Test
   public void testMonkeyHourly() throws Exception {
     runRecurrenceIteratorTest(
         "EXRULE:FREQ=HOURLY;INTERVAL=1;BYMONTHDAY=12,10,-4",
@@ -1092,6 +1169,9 @@ public class RRuleIteratorImplTest extends TestCase {
 
   // TODO(msamuel): test BYSETPOS with FREQ in (WEEKLY,MONTHLY,YEARLY) x
   // (setPos absolute, setPos relative, setPos mixed)
+
+  @Ignore
+  @Test
   public void testWednesdayAt9AndFridayAt12() throws Exception {
       // Wednesdays at 9:00 and Fridays at noon, starting 1/1/2014 (a Wednesday) through 1/11/2014
       // (two Saturdays later).  Should be 4 occurrences:

@@ -18,22 +18,27 @@ import com.google.ical.util.TimeUtils;
 import com.google.ical.values.DateTimeValueImpl;
 import com.google.ical.values.DateValue;
 import com.google.ical.values.DateValueImpl;
+import org.junit.Test;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
-import junit.framework.TestCase;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * testcases for {@link DateIteratorFactory}.
  *
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class DateIteratorFactoryTest extends TestCase {
+public class DateIteratorFactoryTest {
 
   private static final TimeZone PST =
       TimeZone.getTimeZone("America/Los_Angeles");
 
+  @Test
   public void testDateValueToDate() throws Exception {
     assertEquals(createDateUtc(2006, 10, 13, 0, 0, 0),
                  DateIteratorFactory.dateValueToDate(
@@ -43,6 +48,7 @@ public class DateIteratorFactoryTest extends TestCase {
                      new DateTimeValueImpl(2006, 10, 13, 12, 30, 1)));
   }
 
+  @Test
   public void testDateToDateTimeValue() throws Exception {
     assertEquals(new DateTimeValueImpl(2006, 10, 13, 0, 0, 0),
                  DateIteratorFactory.dateToDateValue(
@@ -58,6 +64,7 @@ public class DateIteratorFactoryTest extends TestCase {
                      createDateUtc(2006, 10, 13, 12, 30, 1), true));
   }
 
+  @Test
   public void testConsistency() throws Exception {
     DateValue dv = new DateValueImpl(2006, 10, 13),
              dtv = new DateTimeValueImpl(2006, 10, 13, 12, 30, 1);
@@ -67,6 +74,7 @@ public class DateIteratorFactoryTest extends TestCase {
                           DateIteratorFactory.dateValueToDate(dtv), true));
   }
 
+  @Test
   public void testCreateDateIterableUntimed() throws Exception {
     DateIterable iterable = DateIteratorFactory.createDateIterable(
         "RRULE:FREQ=DAILY;INTERVAL=2;COUNT=8\n"
@@ -97,6 +105,7 @@ public class DateIteratorFactoryTest extends TestCase {
     assertTrue(!it.hasNext());
   }
 
+  @Test
   public void testCreateDateIterableTimed() throws Exception {
     DateIterable iterable = DateIteratorFactory.createDateIterable(
         "RRULE:FREQ=DAILY;INTERVAL=2;COUNT=8\n"

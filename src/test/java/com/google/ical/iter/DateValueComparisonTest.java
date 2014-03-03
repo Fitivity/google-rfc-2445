@@ -17,23 +17,16 @@ package com.google.ical.iter;
 import com.google.ical.values.DateTimeValueImpl;
 import com.google.ical.values.DateValue;
 import com.google.ical.values.DateValueImpl;
-import junit.framework.TestCase;
+import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 /**
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class DateValueComparisonTest extends TestCase {
+public class DateValueComparisonTest {
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-  }
-
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-  }
-
+  @Test
   public void testComparisonSameAsDateValueImpl() throws Exception {
     // It's more important for DateValueComparison to be a total ordering
     // (see the class comments) than it be consistent with DateValue.

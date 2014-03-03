@@ -16,24 +16,17 @@ package com.google.ical.util;
 
 import com.google.ical.values.DateTimeValueImpl;
 import com.google.ical.values.DateValueImpl;
+import org.junit.Test;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class DTBuilderTest extends TestCase {
+public class DTBuilderTest  {
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-  }
-
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-  }
-
+  @Test
   public void testEquals() throws Exception {
     assertTrue(!new DTBuilder(2006, 1, 2).equals(null));
     assertTrue(!new DTBuilder(2006, 1, 2).equals(new Object()));
@@ -60,6 +53,7 @@ public class DTBuilderTest extends TestCase {
     assertEquals(new DTBuilder(0, 0, 0), new DTBuilder(0, 0, 0, 0, 0, 0));
   }
 
+  @Test
   public void testToDate() throws Exception {
     assertEquals(new DateValueImpl(2006, 1, 2),
                  new DTBuilder(2006, 1, 2).toDate());
@@ -70,6 +64,7 @@ public class DTBuilderTest extends TestCase {
                  new DTBuilder(2005, 12, 33).toDate());
   }
 
+  @Test
   public void testToDateTime() throws Exception {
     assertEquals(new DateTimeValueImpl(2006, 1, 2, 0, 0, 0),
                  new DTBuilder(2006, 1, 2).toDateTime());
@@ -82,6 +77,7 @@ public class DTBuilderTest extends TestCase {
                  new DTBuilder(2005, 12, 31, 60, 0, 0).toDateTime());
   }
 
+  @Test
   public void testCompareTo() throws Exception {
     assertTrue(
         new DTBuilder(2005, 6, 15).compareTo(new DateValueImpl(2005, 6, 15))
@@ -118,6 +114,7 @@ public class DTBuilderTest extends TestCase {
         > 0);
   }
 
+  @Test
   public void testNormalize() throws Exception {
     DTBuilder dtb = new DTBuilder(2006, 1, 1);
     assertEquals("2006-1-1 0:0:0", dtb.toString());

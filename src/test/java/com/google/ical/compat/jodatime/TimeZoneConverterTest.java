@@ -14,33 +14,28 @@
 
 package com.google.ical.compat.jodatime;
 
-import java.util.Date;
+import org.joda.time.DateTimeZone;
+import org.junit.Test;
+
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Random;
 import java.util.TimeZone;
-import junit.framework.TestCase;
-import org.joda.time.DateTimeZone;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 /**
  *
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class TimeZoneConverterTest extends TestCase {
+public class TimeZoneConverterTest {
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-  }
-
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-  }
 
   private static final long MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
   private static final long MILLIS_PER_YEAR = (long) (365.25 * MILLIS_PER_DAY);
 
+  @Test
   public void testConvertMonteCarlo() throws Exception {
     long seed = 1161647988961L;
     Random rand = new Random(seed);
@@ -87,6 +82,7 @@ public class TimeZoneConverterTest extends TestCase {
     }
   }
 
+  @Test
   public void testCleanUpTzid() throws Exception {
     assertEquals("GMT+06:12", TimeZoneConverter.cleanUpTzid("06:12"));
     assertEquals("GMT-07:00", TimeZoneConverter.cleanUpTzid("-07:00"));
@@ -99,6 +95,7 @@ public class TimeZoneConverterTest extends TestCase {
    * These may change as the DateTimeZone is updated!  Check
    * http://www.worldtimezone.com/dst_news/ for updates.
    */
+  @Test
   public void testSomeTimeZonesDST() {
     assertDST("UTC", false);
     assertDST("America/Chicago", true);
@@ -118,6 +115,7 @@ public class TimeZoneConverterTest extends TestCase {
     assertDST("Australia/Adelaide", true);
   }
 
+  @Test
   public void testEquality() {
     TimeZone tz1 = TimeZoneConverter.toTimeZone(
         DateTimeZone.forID("America/Los_Angeles"));
@@ -168,7 +166,7 @@ public class TimeZoneConverterTest extends TestCase {
                  0, tz.getDSTSavings());
   }
 
-  private static void assertOffsetsEqualForDate(
+    private static void assertOffsetsEqualForDate(
       TimeZone utilTz, DateTimeZone jodaTz, long offset) {
 
     TimeZone convertedTz = TimeZoneConverter.toTimeZone(jodaTz);
@@ -201,7 +199,7 @@ public class TimeZoneConverterTest extends TestCase {
                      (int) (offset % MILLIS_PER_DAY)));
   }
 
-  private static void checkEqualsAndHashCodeMethods(
+    private static void checkEqualsAndHashCodeMethods(
       TimeZone tz1, TimeZone tz2, boolean equal) {
     if (equal) {
       assertEquals(tz1, tz2);

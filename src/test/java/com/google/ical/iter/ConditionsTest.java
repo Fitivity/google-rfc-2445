@@ -14,27 +14,18 @@
 
 package com.google.ical.iter;
 
+import com.google.ical.util.Predicate;
 import com.google.ical.values.DateValue;
 import com.google.ical.values.DateValueImpl;
-import com.google.ical.util.Predicate;
+import org.junit.Test;
 
-import junit.framework.TestCase;
-
+import static org.junit.Assert.assertTrue;
 /**
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class ConditionsTest extends TestCase {
+public class ConditionsTest {
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-  }
-
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-  }
-
+  @Test
   public void testCountCondition() throws Exception {
     Predicate<DateValue> cc = Conditions.countCondition(3);
     assertTrue(cc.apply(new DateValueImpl(2006, 2, 1)));

@@ -14,19 +14,24 @@
 
 package com.google.ical.values;
 
+import org.junit.Test;
+
 import java.text.ParseException;
 import java.util.TimeZone;
-import junit.framework.TestCase;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class IcalParseUtilTest extends TestCase {
+public class IcalParseUtilTest  {
 
   private static final TimeZone PDT =
  TimeZone.getTimeZone("America/Los_Angeles");
   private static final TimeZone UTC = TimeZone.getTimeZone("UTC");
 
+  @Test
   public void testParseDates() throws Exception {
     assertEquals(new DateValueImpl(2006, 2, 25),
                  IcalParseUtil.parseDateValue("20060225", null));
@@ -36,6 +41,7 @@ public class IcalParseUtilTest extends TestCase {
                  IcalParseUtil.parseDateValue("20060225", UTC));
   }
 
+  @Test
   public void testParseDateTimes() throws Exception {
     assertEquals(new DateTimeValueImpl(2006, 2, 25, 12, 0, 0),
                  IcalParseUtil.parseDateValue("20060225T120000", null));
@@ -45,6 +51,7 @@ public class IcalParseUtilTest extends TestCase {
                  IcalParseUtil.parseDateValue("20060225T123005", UTC));
   }
 
+  @Test
   public void testParseDateTimesUtc() throws Exception {
     assertEquals(new DateTimeValueImpl(2006, 2, 25, 12, 0, 0),
                  IcalParseUtil.parseDateValue("20060225T120000Z", null));
@@ -54,6 +61,7 @@ public class IcalParseUtilTest extends TestCase {
                  IcalParseUtil.parseDateValue("20060225T123005Z", UTC));
   }
 
+  @Test
   public void testBadDates() throws Exception {
     try {
       IcalParseUtil.parsePeriodValue("19700101/19700101T010000");
@@ -87,11 +95,13 @@ public class IcalParseUtilTest extends TestCase {
     }
   }
 
+  @Test
   public void testNormalized() throws Exception {
     assertEquals(new DateTimeValueImpl(2006, 3, 1, 12, 0, 0),
                  IcalParseUtil.parseDateValue("20060229T120000Z", null));
   }
 
+  @Test
   public void testUnfold() throws Exception {
     assertEquals("", IcalParseUtil.unfoldIcal(""));
     assertEquals("foo", IcalParseUtil.unfoldIcal("foo"));

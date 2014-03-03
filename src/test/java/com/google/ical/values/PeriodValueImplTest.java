@@ -14,24 +14,22 @@
 
 package com.google.ical.values;
 
-import com.google.ical.values.DateTimeValue;
-import com.google.ical.values.DateTimeValueImpl;
-import com.google.ical.values.DateValue;
-import com.google.ical.values.DateValueImpl;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 /**
  * testcases for {@link PeriodValueImpl}.
  *
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class PeriodValueImplTest extends TestCase {
+public class PeriodValueImplTest {
 
   private static final DateValue[] DATE_VALUES = new DateValue[16];
   private static final DateTimeValue[] DATE_TIME_VALUES = new DateTimeValue[16];
@@ -56,14 +54,7 @@ public class PeriodValueImplTest extends TestCase {
     Arrays.sort(DATE_TIME_VALUES);
   }
 
-  @Override protected void setUp() throws Exception {
-    super.setUp();
-  }
-
-  @Override protected void tearDown() throws Exception {
-    super.tearDown();
-  }
-
+  @Test
   public void testConstructor() throws Exception {
     Random rnd = new Random();
     for (DateValue[] values :
@@ -110,6 +101,7 @@ public class PeriodValueImplTest extends TestCase {
     }
   }
 
+  @Test
   public void testDurationConstructor() throws Exception {
     final DateValue DV = new DateValueImpl(2005, 2, 15);
     final DateTimeValue DTV0 = new DateTimeValueImpl(2005, 2, 15, 0, 0, 0),
@@ -156,6 +148,7 @@ public class PeriodValueImplTest extends TestCase {
                  PeriodValueImpl.createFromDuration(DTV12, SAME_TIME));
   }
 
+  @Test
   public void testContains() throws Exception {
     Random rnd = new Random();
     for (DateValue[] values :
@@ -188,6 +181,7 @@ public class PeriodValueImplTest extends TestCase {
     }
   }
 
+  @Test
   public void testIntersects() throws Exception {
     Random rnd = new Random();
     for (DateValue[] values :
@@ -220,6 +214,7 @@ public class PeriodValueImplTest extends TestCase {
     }
   }
 
+  @Test
   public void testEqualsAndHashcode() throws Exception {
     Random rnd = new Random();
     for (DateValue[] values :
@@ -260,6 +255,7 @@ public class PeriodValueImplTest extends TestCase {
     }
   }
 
+  @Test
   public void testToString() throws Exception {
     String a = "20050411T120000",
            b = "20050413T174330";

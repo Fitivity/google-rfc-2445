@@ -14,23 +14,16 @@
 
 package com.google.ical.iter;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 /**
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class IntSetTest extends TestCase {
+public class IntSetTest {
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-  }
-
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-  }
-
+  @Test
   public void testAddAndContainsAndSize() throws Exception {
     IntSet a = new IntSet();
     assertTrue(!a.contains(-2));
@@ -68,6 +61,7 @@ public class IntSetTest extends TestCase {
     assertEquals(2, a.size());
   }
 
+  @Test
   public void testToIntArray() throws Exception {
     IntSet a = new IntSet();
     assertEquals(0, a.toIntArray().length);

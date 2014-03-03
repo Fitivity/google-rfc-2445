@@ -17,20 +17,23 @@ package com.google.ical.compat.jodatime;
 import com.google.ical.values.DateTimeValueImpl;
 import com.google.ical.values.DateValue;
 import com.google.ical.values.DateValueImpl;
-import junit.framework.TestCase;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
+import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 /**
  * testcases for {@link LocalDateIteratorFactory}.
  *
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class LocalDateIteratorFactoryTest extends TestCase {
+public class LocalDateIteratorFactoryTest {
 
   private static final DateTimeZone PST =
       DateTimeZone.forID("America/Los_Angeles");
 
+  @Test
   public void testDateValueToLocalDate() throws Exception {
     assertEquals(date(2006, 10, 13),
                  LocalDateIteratorFactory.dateValueToLocalDate(
@@ -40,18 +43,21 @@ public class LocalDateIteratorFactoryTest extends TestCase {
                      new DateTimeValueImpl(2006, 10, 13, 12, 30, 1)));
   }
 
+  @Test
   public void testLocalDateToDateTimeValue() throws Exception {
     assertEquals(new DateValueImpl(2006, 10, 13),
                  LocalDateIteratorFactory.localDateToDateValue(
                      date(2006, 10, 13)));
   }
 
+  @Test
   public void testConsistency() throws Exception {
     DateValue dv = new DateValueImpl(2006, 10, 13);
     assertEquals(dv, LocalDateIteratorFactory.localDateToDateValue(
                           LocalDateIteratorFactory.dateValueToLocalDate(dv)));
   }
 
+  @Test
   public void testCreateLocalDateIterableUntimed() throws Exception {
     LocalDateIterable iterable =
       LocalDateIteratorFactory.createLocalDateIterable(
@@ -83,6 +89,7 @@ public class LocalDateIteratorFactoryTest extends TestCase {
     assertTrue(!it.hasNext());
   }
 
+  @Test
   public void testCreateLocalDateIterableTimed() throws Exception {
     LocalDateIterable iterable =
       LocalDateIteratorFactory.createLocalDateIterable(

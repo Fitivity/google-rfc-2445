@@ -14,32 +14,41 @@
 
 package com.google.ical.iter;
 
-import com.google.ical.values.RRule;
+import com.google.ical.util.TimeUtils;
 import com.google.ical.values.DateValue;
 import com.google.ical.values.DateValueImpl;
-import com.google.ical.util.TimeUtils;
-import junit.framework.TestCase;
+import com.google.ical.values.RRule;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 
 /**
  * @author mikesamuel+svn@gmail.com (Mike Samuel)
  */
-public class StressTest extends TestCase {
+public class StressTest  {
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
+  private String testName;
 
+  @Rule
+  public TestRule watcher = new TestWatcher() {
+    protected void starting(Description description) {
+      testName = description.getMethodName();
+    }
+  };
+
+  @Before
+  public void setUp() throws Exception {
     // prime the VM
     for (int runs = 10; --runs >= 0;) {
       runOne();
     }
   }
 
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-  }
 
+  @Test
   public void testSpeed() throws Exception {
     long t0 = System.nanoTime();
     // cycle through 10 recurrence rules, advancing and pulling a few dates off
@@ -48,7 +57,7 @@ public class StressTest extends TestCase {
       runOne();
     }
     long dt = System.nanoTime() - t0;
-    System.out.println(getName() + " took " + (dt / 1e6) + " ms");
+    System.out.println(testName + " took " + (dt / 1e6) + " ms");
   }
 
   static String[] RECURRENCE_RULES = {
